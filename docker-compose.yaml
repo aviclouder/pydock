@@ -1,0 +1,38 @@
+# version: "3.8"
+
+services:
+  flask-app:
+    build:
+      context: ./flask
+    container_name: pydock-container
+    ports:
+    - "8000:8000"
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    # command: ["sh", "-c", "sleep 30s && python config.py && python app.py"] 
+    command: ["sh", "-c", "sleep 30s && python app.py"] 
+    networks:
+      - pydock-net
+
+  
+  mysql-db:
+    image: mysql:8
+    container_name: flask-mysql
+    environment:
+      - "MYSQL_ROOT_PASSWORD=password"
+    expose:
+    - "3306"
+    networks:
+      - pydock-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-ppassword"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+networks:
+  pydock-net:
+
+
