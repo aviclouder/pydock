@@ -13,7 +13,12 @@ services:
     # command: ["sh", "-c", "sleep 30s && python config.py && python app.py"] 
     # command: ["sh", "-c", "sleep 30s && python app.py"] 
     restart: always
-    
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000 || exit 1"]
+      interval: 10s
+      retries: 3
+      timeout: 5s
+      start_period: 30s
     networks:
       - pydock-net
 
@@ -27,6 +32,8 @@ services:
     - "3306"
     networks:
       - pydock-net
+    volumes:
+      - mysql-data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-ppassword"]
       interval: 10s
@@ -37,4 +44,5 @@ services:
 networks:
   pydock-net:
 
-
+volumes:
+  mysql_data:
