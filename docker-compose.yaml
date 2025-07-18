@@ -45,4 +45,4 @@ networks:
   pydock-net:
 
 volumes:
-  mysql_data:
+  mysql-data:
