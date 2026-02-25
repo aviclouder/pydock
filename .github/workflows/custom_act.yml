@@ -3,13 +3,14 @@ description: "Testing Github Actions"
 
 on:
   push:
+  workflow_dispatch:
 
-job:
-  to-print-time:
-    run-on: ubuntu-latest
+jobs:
+  print-time:
+    runs-on: ubuntu-latest
 
- steps:
-      - name: Print exectuion time in formatted style
+    steps:
+      - name: Print UTC and IST time
         run: |
           echo "UTC Time:"
           date -u +"%Y-%m-%dT%H:%M:%SZ"
